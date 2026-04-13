@@ -35,3 +35,8 @@ def add_book():
     books.append(new_book)
     save_books(books)
     return jsonify(new_book), 201
+
+@app.route('/api/books', methods=['GET'])
+def get_books():
+    books = load_books()
+    return jsonify(books)
