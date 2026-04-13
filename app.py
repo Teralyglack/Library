@@ -21,3 +21,17 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+@app.route('/api/books', methods=['POST'])
+def add_book():
+    books = load_books()
+    book_data = request.json
+    
+    new_book = {
+        'id': len(books) + 1,
+        'title': book_data['title'],
+        'author': book_data['author']
+    }
+    books.append(new_book)
+    save_books(books)
+    return jsonify(new_book), 201
