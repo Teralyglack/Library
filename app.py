@@ -40,3 +40,10 @@ def add_book():
 def get_books():
     books = load_books()
     return jsonify(books)
+
+@app.route('/api/books/<int:book_id>', methods=['DELETE'])
+def delete_book(book_id):
+    books = load_books()
+    books = [book for book in books if book['id'] != book_id]
+    save_books(books)
+    return jsonify({'message': 'Book deleted'}), 200
