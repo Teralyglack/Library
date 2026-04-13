@@ -23,35 +23,60 @@
 
     <script>
         async function addBook() {
-            const title = document.getElementById('title').value;
-            const author = document.getElementById('author').value;
-            
-            if (!title || !author) {
-                alert('Please fill all fields');
-                return;
-            }
-            
-            const response = await fetch('/api/books', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({title, author})
-            });
-            
-            if (response.ok) {
-                document.getElementById('title').value = '';
-                document.getElementById('author').value = '';
-                loadBooks();
-            }
-        }
-        
-        async function loadBooks() {
-            const response = await fetch('/api/books');
-            const books = await response.json();
-            // Will implement display later
-            console.log(books);
-        }
-        
+    const title = document.getElementById('title').value;
+    const author = document.getElementById('author').value;
+    
+    if (!title || !author) {
+        alert('Please fill all fields');
+        return;
+    }
+    
+    const response = await fetch('/api/books', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({title, author})
+    });
+    
+    if (response.ok) {
+        document.getElementById('title').value = '';
+        document.getElementById('author').value = '';
         loadBooks();
+    }
+}
+
+async function loadBooks() {
+    const response = await fetch('/api/books');
+    const books = await response.json();
+    displayBooks(books);
+}
+
+function displayBooks(books) {
+    const container = document.getElementById('books');
+    if (books.length === 0) {
+        container.innerHTML = '<p>No books yet. Add your first book!</p>';
+        return;
+    }
+    
+    container.innerHTML = books.map(book => `
+        <div class="book-item">
+            <div class="book-info">
+                <strong>"${book.title}"</strong> by ${book.author}
+            </div>
+            <button onclick="deleteBook(${book.id})" class="delete-btn">Delete</button>
+        </div>
+    `).join('');
+}
+
+async function deleteBook(id) {
+    if (confirm('Delete this book?')) {
+        await fetch(`/api/books/${id}`, {method: 'DELETE'});
+        loadBooks();
+    }
+}
+
+// Загрузить книги при загрузке страницы
+loadBooks();
+
     </script>
 </body>
 </html>
