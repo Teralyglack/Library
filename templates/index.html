@@ -2,11 +2,56 @@
 <html>
 <head>
     <title>Mini Library</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>📚 Mini Library</h1>
-    <div id="app">
-        <div>Loading...</div>
+    <div class="container">
+        <h1>📚 Mini Library</h1>
+        
+        <div class="add-book">
+            <h2>Add New Book</h2>
+            <input type="text" id="title" placeholder="Book Title" required>
+            <input type="text" id="author" placeholder="Author Name" required>
+            <button onclick="addBook()">Add Book</button>
+        </div>
+        
+        <div id="book-list">
+            <h2>My Books</h2>
+            <div id="books"></div>
+        </div>
     </div>
+
+    <script>
+        async function addBook() {
+            const title = document.getElementById('title').value;
+            const author = document.getElementById('author').value;
+            
+            if (!title || !author) {
+                alert('Please fill all fields');
+                return;
+            }
+            
+            const response = await fetch('/api/books', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({title, author})
+            });
+            
+            if (response.ok) {
+                document.getElementById('title').value = '';
+                document.getElementById('author').value = '';
+                loadBooks();
+            }
+        }
+        
+        async function loadBooks() {
+            const response = await fetch('/api/books');
+            const books = await response.json();
+            // Will implement display later
+            console.log(books);
+        }
+        
+        loadBooks();
+    </script>
 </body>
 </html>
