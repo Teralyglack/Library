@@ -30,7 +30,8 @@ def add_book():
     new_book = {
         'id': len(books) + 1,
         'title': book_data['title'],
-        'author': book_data['author']
+        'author': book_data['author'],
+        'year': book_data.get('year', 'Unknown')
     }
     books.append(new_book)
     save_books(books)

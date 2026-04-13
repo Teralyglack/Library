@@ -12,6 +12,7 @@
             <h2>Add New Book</h2>
             <input type="text" id="title" placeholder="Book Title" required>
             <input type="text" id="author" placeholder="Author Name" required>
+            <input type="text" id="year" placeholder="Publication Year" required>
             <button onclick="addBook()">Add Book</button>
         </div>
         
@@ -25,7 +26,9 @@
         async function addBook() {
     const title = document.getElementById('title').value;
     const author = document.getElementById('author').value;
-    
+    const year = document.getElementById('year').value;
+    body: JSON.stringify({title, author, year})
+
     if (!title || !author) {
         alert('Please fill all fields');
         return;
@@ -60,7 +63,7 @@ function displayBooks(books) {
     container.innerHTML = books.map(book => `
         <div class="book-item">
             <div class="book-info">
-                <strong>"${book.title}"</strong> by ${book.author}
+                <strong>"${book.title}"</strong> by ${book.author} (${book.year})
             </div>
             <button onclick="deleteBook(${book.id})" class="delete-btn">Delete</button>
         </div>
